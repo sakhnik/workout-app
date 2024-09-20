@@ -12,7 +12,7 @@
     let timer;
     let startTime;
     let elapsedTime = 0;
-    let estimatedFinishTime = 0; // Estimated time in seconds
+    let estimatedFinishTime = '';
 
     const exercises = [
         { name: 'Pullups', reps: 10 },
@@ -20,31 +20,41 @@
         { name: 'Crunches', reps: 30 }
     ];
 
+    let stepsDone = 0;
+
     // Start the workout and calculate the estimated finish time
     function startWorkout() {
         workoutStarted = true;
         startTime = new Date();
-        calculateEstimatedFinishTime();
         startRest();
     }
 
     // Calculate the total workout duration in seconds based on sets, exercises, and rest
-    function calculateEstimatedFinishTime() {
-        const totalExercises = sets * exercises.length;
-        const totalRestTime = totalExercises * restTime;
-        const totalExerciseTime = totalExercises * exerciseTime;
-        estimatedFinishTime = Math.floor((new Date().getTime() + (totalRestTime + totalExerciseTime) * 1000) / 1000);
+    function calculateEstimatedFinishTime(stage) {
+        if (stepsDone === 0) {
+            return;
+        }
+        const now = new Date().getTime();
+        const elapsedTime = now - startTime;
+        const rate = elapsedTime / stepsDone;
+        const stepsTodo = 2 * ((sets - currentSet) * exercises.length + (exercises.length - currentExercise)) - stage;
+        const finishDate = new Date(Math.floor(new Date().getTime() + (stepsTodo * rate)));
+        estimatedFinishTime = finishDate.toLocaleTimeString();
     }
 
     // Show upcoming exercise after rest
     function showExercise() {
         isResting = false;
+        calculateEstimatedFinishTime(1);
+        ++stepsDone;
         startTimer(exerciseTime); // Exercise lasts exerciseTime seconds
     }
 
     // Start the rest period
     function startRest() {
         isResting = true;
+        calculateEstimatedFinishTime(0);
+        ++stepsDone;
         startTimer(restTime); // Rest lasts restTime seconds
     }
 
@@ -56,7 +66,7 @@
         timer = setInterval(() => {
             elapsedTime += 1;
             if (elapsedTime >= duration) {
-                nextExercise();
+                //nextExercise();
             }
         }, 1000);
     }
@@ -126,12 +136,6 @@
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     });
-
-    // Format estimated finish time
-    function formatEstimatedFinishTime() {
-        const finishDate = new Date(estimatedFinishTime * 1000);
-        return finishDate.toLocaleTimeString();
-    }
 </script>
 
 <style>
@@ -199,13 +203,14 @@
 
         <!-- Estimated finish time -->
         <div class="estimated-time">
-            Estimated finish time: {formatEstimatedFinishTime()}
+            Estimated finish time: {estimatedFinishTime}
         </div>
     </div>
 {:else}
     <!-- Summary Screen -->
     <div class="container">
         <h1>Workout Complete!</h1>
+        <p>Total time: {Math.floor((new Date() - startTime) / 1000)} seconds</p>
         <p>Total time: {Math.floor((new Date() - startTime) / 1000)} seconds</p>
     </div>
 {/if}
