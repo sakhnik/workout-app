@@ -9,6 +9,8 @@
     let workoutFinished = false;
     let timer;
     let startTime;
+    let restStartTime;
+    let totalRestTime = 0;
     let timerTime = 0;
     let estimatedFinishTime = '';
 
@@ -24,6 +26,7 @@
     function startWorkout() {
         workoutStarted = true;
         startTime = new Date();
+        totalRestTime = 0;
         startRest();
     }
 
@@ -42,7 +45,9 @@
 
     // Show upcoming exercise after rest
     function showExercise() {
+        totalRestTime += new Date().getTime() - restStartTime;
         isResting = false;
+        exerciseStartTime = new Date().getTime();
         calculateEstimatedFinishTime(1);
         ++stepsDone;
         startTimer();
@@ -51,6 +56,7 @@
     // Start the rest period
     function startRest() {
         isResting = true;
+        restStartTime = new Date().getTime();
         calculateEstimatedFinishTime(0);
         ++stepsDone;
         startTimer();
@@ -217,6 +223,6 @@
     <div class="container">
         <h1>Workout Complete!</h1>
         <p>Total time: {Math.floor((new Date() - startTime) / 1000)} seconds</p>
-        <p>Total time: {Math.floor((new Date() - startTime) / 1000)} seconds</p>
+        <p>Total rest time: {Math.floor(totalRestTime / 1000)} seconds {Math.floor(100 * totalRestTime / (new Date() - startTime))}%</p>
     </div>
 {/if}
