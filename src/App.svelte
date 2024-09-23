@@ -4,14 +4,12 @@
     let sets = 10;
     let currentSet = 1;
     let currentExercise = 0;
-    let restTime = 60; // Rest time in seconds
-    let exerciseTime = 30; // Each exercise duration in seconds
     let isResting = true; // Initially, we rest before exercise
     let workoutStarted = false;
     let workoutFinished = false;
     let timer;
     let startTime;
-    let elapsedTime = 0;
+    let timerTime = 0;
     let estimatedFinishTime = '';
 
     const exercises = [
@@ -38,7 +36,7 @@
         const elapsedTime = now - startTime;
         const rate = elapsedTime / stepsDone;
         const stepsTodo = 2 * ((sets - currentSet) * exercises.length + (exercises.length - currentExercise)) - stage;
-        const finishDate = new Date(Math.floor(new Date().getTime() + (stepsTodo * rate)));
+        const finishDate = new Date(Math.floor(now + (stepsTodo * rate)));
         estimatedFinishTime = finishDate.toLocaleTimeString();
     }
 
@@ -47,7 +45,7 @@
         isResting = false;
         calculateEstimatedFinishTime(1);
         ++stepsDone;
-        startTimer(exerciseTime); // Exercise lasts exerciseTime seconds
+        startTimer();
     }
 
     // Start the rest period
@@ -55,20 +53,28 @@
         isResting = true;
         calculateEstimatedFinishTime(0);
         ++stepsDone;
-        startTimer(restTime); // Rest lasts restTime seconds
+        startTimer();
     }
 
-    // Start a countdown timer and switch between rest and exercise
-    function startTimer(duration) {
+    function startTimer() {
         clearInterval(timer);
-        elapsedTime = 0;
+        let start = new Date().getTime();
+        timerTime = 0;
 
         timer = setInterval(() => {
-            elapsedTime += 1;
-            if (elapsedTime >= duration) {
-                //nextExercise();
-            }
+            timerTime = Math.floor((new Date().getTime() - start) / 1000);
         }, 1000);
+    }
+
+    function formatSeconds(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        if (minutes === 0) {
+            return `${seconds}`;
+        }
+        
+        const remainingSeconds = seconds % 60;
+        const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+        return `${minutes}:${formattedSeconds}`;
     }
 
     // Move to the next exercise or set
@@ -182,7 +188,7 @@
         {#if isResting}
             <!-- Display rest and the upcoming exercise -->
             <div class="exercise rest">
-                Rest for {restTime - elapsedTime} seconds
+                Resting {formatSeconds(timerTime)} seconds
             </div>
             <div>Upcoming: {exercises[currentExercise].name}</div>
             <div>Set {currentSet}/{sets}, Exercise {currentExercise + 1}/{exercises.length}</div>
@@ -192,7 +198,7 @@
                 {exercises[currentExercise].name}: {exercises[currentExercise].reps} reps
             </div>
             <div>Set {currentSet}/{sets}, Exercise {currentExercise + 1}/{exercises.length}</div>
-            <div>Time remaining: {exerciseTime - elapsedTime} seconds</div>
+            <div>Time: {formatSeconds(timerTime)} seconds</div>
         {/if}
 
         <!-- Button group for next/previous -->
