@@ -221,7 +221,7 @@
     <!-- Summary Screen -->
     <div class="container">
         <h1>Workout Complete!</h1>
-        <p>Total time: {Math.floor((new Date() - startTime) / 1000)} seconds</p>
-        <p>Total rest time: {Math.floor(totalRestTime / 1000)} seconds {Math.floor(100 * totalRestTime / (new Date() - startTime))}%</p>
+        <p>Total time: {formatSeconds(Math.floor((new Date() - startTime) / 1000))} seconds</p>
+        <p>Total rest time: {formatSeconds(Math.floor(totalRestTime / 1000))} seconds {Math.floor(100 * totalRestTime / (new Date() - startTime))}%</p>
     </div>
 {/if}
