@@ -47,7 +47,6 @@
     function showExercise() {
         totalRestTime += new Date().getTime() - restStartTime;
         isResting = false;
-        exerciseStartTime = new Date().getTime();
         calculateEstimatedFinishTime(1);
         ++stepsDone;
         startTimer();
