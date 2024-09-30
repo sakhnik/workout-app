@@ -193,18 +193,16 @@
         {#if isResting}
             <!-- Display rest and the upcoming exercise -->
             <div class="exercise rest">
-                Resting {formatSeconds(timerTime)} seconds
+                Resting: {exercises[currentExercise].name}
             </div>
-            <div>Upcoming: {exercises[currentExercise].name}</div>
-            <div>Set {currentSet}/{sets}, Exercise {currentExercise + 1}/{exercises.length}</div>
         {:else}
             <!-- Display current exercise -->
             <div class="exercise">
                 {exercises[currentExercise].name}: {exercises[currentExercise].reps} reps
             </div>
-            <div>Set {currentSet}/{sets}, Exercise {currentExercise + 1}/{exercises.length}</div>
-            <div>Time: {formatSeconds(timerTime)} seconds</div>
         {/if}
+        <div>Set {currentSet}/{sets}, Exercise {currentExercise + 1}/{exercises.length}</div>
+        <div>Time: {formatSeconds(timerTime)} seconds</div>
 
         <!-- Button group for next/previous -->
         <div class="button-group">
