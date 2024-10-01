@@ -1,5 +1,14 @@
 <script>
     import { onMount } from 'svelte';
+    import { register, init, isLoading, locale, getLocaleFromNavigator, _ } from "svelte-i18n";
+
+    register('en', () => fetch('/i18n/en.json').then(res => res.json()));
+    register('uk', () => fetch('/i18n/uk.json').then(res => res.json()));
+
+    init({
+        fallbackLocale: 'uk',
+        initialLocale: getLocaleFromNavigator(),
+    });
 
     let sets = 10;
     let currentSet = 1;
@@ -178,14 +187,29 @@
         gap: 10px;
         margin-top: 20px;
     }
+    .language-buttons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        font-size: 16px;
+    }
 </style>
+
+{#if $isLoading}
+Please wait…
+{:else}
 
 {#if !workoutStarted && !workoutFinished}
     <!-- Initial Screen to set number of sets -->
     <div class="container">
-        <h1>How many sets?</h1>
+        <h1>{$_('start.sets?')}</h1>
         <input type="number" bind:value={sets} min="1" max="50">
-        <button class="button" on:click={startWorkout}>Start Workout</button>
+        <button class="button" on:click={startWorkout}>{$_('start.workout')}</button>
     </div>
 {:else if workoutStarted && !workoutFinished}
     <!-- Workout Screen -->
@@ -222,4 +246,11 @@
         <p>Total time: {formatSeconds(Math.floor((new Date() - startTime) / 1000))} seconds</p>
         <p>Total rest time: {formatSeconds(Math.floor(totalRestTime / 1000))} seconds {Math.floor(100 * totalRestTime / (new Date() - startTime))}%</p>
     </div>
+{/if}
+
+<div class="language-buttons">
+    <button on:click={() => locale.set('en')}>Eng</button>
+    <button on:click={() => locale.set('uk')}>Ukr</button>
+</div>
+
 {/if}
