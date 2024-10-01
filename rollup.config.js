@@ -5,6 +5,7 @@ import terser from '@rollup/plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
+import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -59,6 +60,13 @@ export default {
 			exportConditions: ['svelte']
 		}),
 		commonjs(),
+
+		copy({
+			targets: [
+				{ src: 'node_modules/flag-icons/flags/4x3/gb.svg', dest: 'public/flags/4x3' },
+				{ src: 'node_modules/flag-icons/flags/4x3/ua.svg', dest: 'public/flags/4x3' }
+			]
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

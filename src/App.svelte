@@ -1,6 +1,8 @@
 <script>
     import { onMount } from 'svelte';
     import { register, init, isLoading, locale, getLocaleFromNavigator, _ } from "svelte-i18n";
+    import "flag-icons/css/flag-icons.min.css";
+
 
     register('en', () => fetch('/i18n/en.json').then(res => res.json()));
     register('uk', () => fetch('/i18n/uk.json').then(res => res.json()));
@@ -249,8 +251,8 @@ Please wait…
 {/if}
 
 <div class="language-buttons">
-    <button on:click={() => locale.set('en')}>Eng</button>
-    <button on:click={() => locale.set('uk')}>Ukr</button>
+    <button on:click={() => locale.set('en')}><span class="fi fi-gb"></span></button>
+    <button on:click={() => locale.set('uk')}><span class="fi fi-ua"></span></button>
 </div>
 
 {/if}
