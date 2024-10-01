@@ -2,6 +2,23 @@
     "start": {
         "sets?": "How many sets?",
         "workout": "Start Workout"
-    }
-
+    },
+    "workout": {
+        "set": "Set",
+        "exercise": "Exercise",
+        "time": "Time",
+        "s": "s",
+        "resting": "Resting",
+        "next": "Next",
+        "previous": "Previous",
+        "eta": "Estimated finish time"
+    },
+    "summary": {
+        "complete": "Workout Complete!",
+        "total-time": "Total time",
+        "rest-time": "Rest time"
+    },
+    "Pullups": "Pullups",
+    "Pushups": "Pushups",
+    "Crunches": "Crunches"
 }

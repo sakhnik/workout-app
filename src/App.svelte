@@ -93,6 +93,13 @@
         return `${minutes}:${formattedSeconds}`;
     }
 
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+        return `${minutes}:${formattedSeconds}`;
+    }
+
     // Move to the next exercise or set
     function nextExercise() {
         clearInterval(timer);
@@ -219,34 +226,34 @@ Please wait…
         {#if isResting}
             <!-- Display rest and the upcoming exercise -->
             <div class="exercise rest">
-                Resting: {exercises[currentExercise].name}
+                {$_('workout.resting')}: {$_(exercises[currentExercise].name)}
             </div>
         {:else}
             <!-- Display current exercise -->
             <div class="exercise">
-                {exercises[currentExercise].name}: {exercises[currentExercise].reps} reps
+                {$_(exercises[currentExercise].name)}: x{exercises[currentExercise].reps}
             </div>
         {/if}
-        <div>Set {currentSet}/{sets}, Exercise {currentExercise + 1}/{exercises.length}</div>
-        <div>Time: {formatSeconds(timerTime)} seconds</div>
+        <div>{$_('workout.set')} {currentSet}/{sets}, {$_('workout.exercise')} {currentExercise + 1}/{exercises.length}</div>
+        <div>{$_('workout.time')}: {formatSeconds(timerTime)} {$_('workout.s')}</div>
 
         <!-- Button group for next/previous -->
         <div class="button-group">
-            <button class="button" on:click={previousExercise} disabled={currentExercise === 0 || isResting}>Previous</button>
-            <button class="button" on:click={nextExercise}>Next</button>
+            <button class="button" on:click={previousExercise} disabled={currentExercise === 0 || isResting}>{$_('workout.previous')}</button>
+            <button class="button" on:click={nextExercise}>{$_('workout.next')}</button>
         </div>
 
         <!-- Estimated finish time -->
         <div class="estimated-time">
-            Estimated finish time: {estimatedFinishTime}
+            {$_('workout.eta')}: {estimatedFinishTime}
         </div>
     </div>
 {:else}
     <!-- Summary Screen -->
     <div class="container">
-        <h1>Workout Complete!</h1>
-        <p>Total time: {formatSeconds(Math.floor((new Date() - startTime) / 1000))} seconds</p>
-        <p>Total rest time: {formatSeconds(Math.floor(totalRestTime / 1000))} seconds {Math.floor(100 * totalRestTime / (new Date() - startTime))}%</p>
+        <h1>{$_('summary.complete')}</h1>
+        <p>{$_('summary.total-time')}: {formatTime(Math.floor((new Date() - startTime) / 1000))}</p>
+        <p>{$_('summary.rest-time')}: {formatTime(Math.floor(totalRestTime / 1000))} {Math.floor(100 * totalRestTime / (new Date() - startTime))}%</p>
     </div>
 {/if}
 
