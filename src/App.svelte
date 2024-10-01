@@ -51,7 +51,9 @@
         const rate = elapsedTime / stepsDone;
         const stepsTodo = 2 * ((sets - currentSet) * exercises.length + (exercises.length - currentExercise)) - stage;
         const finishDate = new Date(Math.floor(now + (stepsTodo * rate)));
-        estimatedFinishTime = finishDate.toLocaleTimeString();
+        // Show estimated finish time without seconds
+        const options = { hour: '2-digit', minute: '2-digit' };
+        estimatedFinishTime = finishDate.toLocaleTimeString([], options);
     }
 
     // Show upcoming exercise after rest
