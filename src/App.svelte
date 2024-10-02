@@ -188,7 +188,6 @@
     .exercise {
         font-size: 2rem;
         font-weight: bold;
-        margin-top: 20px;
     }
     .rest {
         color: red;
@@ -228,12 +227,18 @@ Please wait…
         {#if isResting}
             <!-- Display rest and the upcoming exercise -->
             <div class="exercise rest">
-                {$_('workout.resting')}: {$_(exercises[currentExercise].name)}
+                {$_('workout.resting')}
+            </div>
+            <div class="exercise">
+                {$_(exercises[currentExercise].name)}
             </div>
         {:else}
             <!-- Display current exercise -->
             <div class="exercise">
-                {$_(exercises[currentExercise].name)}: x{exercises[currentExercise].reps}
+                {$_(exercises[currentExercise].name)}
+            </div>
+            <div class="exercise reps">
+                x{exercises[currentExercise].reps}
             </div>
         {/if}
         <div>{$_('workout.set')} {currentSet}/{sets}, {$_('workout.exercise')} {currentExercise + 1}/{exercises.length}</div>
